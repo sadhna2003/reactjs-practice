@@ -25,7 +25,7 @@ const Todo = () => {
     console.log("todolist", todoList)
 
     return (
-        <section className="container max-w-3xl font-sans w-full mx-auto my-10 p-6 border border-lime-400 rounded-sm bg-lime-200 h-screen">
+        <section className="container max-w-3xl font-sans w-full mx-auto p-6 border border-indigo-400 rounded-sm bg-white h-full">
             <h1 className="text-3xl font-bold text-center">Todo List</h1>
             <form className="flex flex-col gap-4 w-full mt-10 max-w-xl">
                 <input

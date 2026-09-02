@@ -16,9 +16,10 @@ const Counter = () => {
         }
     }
     return (
-        <section className="container mx-auto max-w-6xl w-full h-96">
-            <div className="flex flex-col gap-8 w-full items-center py-20 border border-gray-500 bg-sky-100 rounded-md mt-20 max-w-2xl mx-auto">
-                <p className="font-bold font-sans text-9xl">{count}</p>
+        <section className="">
+            <div className="container mx-auto max-w-2xl w-full h-96 w-full py-20 border border-gray-400 bg-white rounded-md mt-20 max-w-2xl mx-auto">
+                <h1 className="text-3xl font-bold text-center">Basic Counter</h1>
+                <p className="font-bold font-sans text-9xl text-center">{count}</p>
                 <div className="flex flex-row font-sans gap-6 w-full p-6 justify-center">
                     <button
                         type="button"

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { Sidebar } from "@/components/Sidebar";
 
 const popSans = Poppins({
   variable: "--font-poppins",
@@ -20,7 +21,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${popSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-sky-200">{children}</body>
+      <body className="min-h-full flex flex-row bg-sky-200">
+        <header className="p-4 w-xs bg-violet-100 ">
+          <Sidebar/>
+        </header>
+        <main className="w-full p-4 bg-orange-100">{children}</main>
+        </body>
     </html>
   );
 }

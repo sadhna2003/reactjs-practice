@@ -17,8 +17,8 @@ const CharacterCounter = () => {
         handleCount(inputValue)
     }, [inputValue])
     return (
-        <section className="bg-indigo-100 h-screen font-sans">
-            <div className=" rounded-sm border border-violet-500 bg-violet-100 p-6 flex flex-col items-center justify-center w-full container mx-auto max-w-2xl gap-6 mt-10">
+        <section className="flex flex-col justify-center h-96 font-sans">
+            <div className=" rounded-sm border border-violet-500 bg-white p-6 flex flex-col items-center justify-center w-full container mx-auto max-w-2xl gap-6">
                 <h1 className="text-3xl font-bold text-center">Character Counter</h1>
                 <textarea
                     value={inputValue}
