@@ -8,6 +8,10 @@ const navLink = [
   {
     link:"/todo",
     label:"Todo"
+  },
+  {
+    link:"/toggle",
+    label:"Show/Hide Password"
   }
 ]
 export default function Home() {
