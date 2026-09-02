@@ -4,6 +4,10 @@ const navLink = [
   {
     link: "/counter",
     label:"Basic Counter"
+  },
+  {
+    link:"/todo",
+    label:"Todo"
   }
 ]
 export default function Home() {
