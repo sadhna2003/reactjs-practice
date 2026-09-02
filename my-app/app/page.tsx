@@ -16,9 +16,9 @@ export default function Home() {
       <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-start py-32 px-16 bg-white sm:items-start">
          This Project is for Practicing my frontend skills
          <ul className="flex flex-col justify-start items-start gap-4 w-full h-full py-10">
-           {navLink.map((nav)=>{
+           {navLink.map((nav,index)=>{
             return (
-              <li className="text-blue-500 underline hover:text-blue-600">
+              <li key={index} className="text-blue-500 underline hover:text-blue-600">
                 <Link href={nav.link} className="block">
                   {nav.label}
                 </Link>
