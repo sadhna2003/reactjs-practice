@@ -12,6 +12,10 @@ const navLink = [
   {
     link:"/toggle",
     label:"Show/Hide Password"
+  },
+  {
+    link:"character-counter",
+    label:"Character Counter"
   }
 ]
 export default function Home() {
