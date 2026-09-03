@@ -19,6 +19,10 @@ const navLink = [
     {
         link:'search-filter',
         label:"Search Filter"
+    },
+    {
+        link:'tabs',
+        label:'Tab Component'
     }
 ]
 
