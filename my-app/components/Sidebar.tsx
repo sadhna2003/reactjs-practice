@@ -27,6 +27,10 @@ const navLink = [
     {
         link:'accordion',
         label:"Accordion Component"
+    },
+    {
+        link:'pagination',
+        label:"Pagination Concept"
     }
 ]
 
