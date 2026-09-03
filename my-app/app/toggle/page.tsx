@@ -9,7 +9,7 @@ const Toggle = () => {
         setShow((prev)=> !prev)
     }
     return (
-        <section className="bg-orange-100 font-sans h-full min-h-screen">
+        <section className="bg-orange-100 font-sans h-full">
             <div className="border border-orange-300 space-y-4 bg-orange-100 rounded-sm p-4 container mx-auto w-full max-w-xl mt-10">
                 <h1>Show Hide Password Field</h1>
                 <input
