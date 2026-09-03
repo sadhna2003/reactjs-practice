@@ -23,6 +23,10 @@ const navLink = [
     {
         link:'tabs',
         label:'Tab Component'
+    },
+    {
+        link:'accordion',
+        label:"Accordion Component"
     }
 ]
 
