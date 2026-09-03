@@ -22,10 +22,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${popSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-row bg-sky-200">
-        <header className="p-4 w-xs bg-violet-100 ">
+        <header className="fixed left-0 top-0 h-screen w-64 p-4 bg-violet-100">
           <Sidebar/>
         </header>
-        <main className="w-full p-4 bg-orange-100">{children}</main>
+        <main className="w-full ml-64 p-4 bg-orange-100 min-h-screen overflow-x-hidden">{children}</main>
         </body>
     </html>
   );

@@ -15,6 +15,10 @@ const navLink = [
     {
         link: "character-counter",
         label: "Character Counter"
+    },
+    {
+        link:'search-filter',
+        label:"Search Filter"
     }
 ]
 
