@@ -5,17 +5,30 @@ import React, { useEffect } from "react";
 const FetchApi = () => {
     const [userData, setUserData] = React.useState<Users[]>()
     const [loading, setLoading] = React.useState(true)
+    const [error, setError] = React.useState(false)
+
     const fetchData = async () => {
-        const data = await getUsers()
-        if (data) {
-            setUserData(data)
-            setLoading(false)
+        try {
+            setLoading(true);
+            setError(false);
+
+            const data = await getUsers();
+
+            if (data) {
+                setUserData(data);
+            }
+        } catch (error) {
+            setError(true);
+        } finally {
+            setLoading(false);
         }
     }
+
     const handleRefresh = () => {
         setLoading(true)
         fetchData()
     }
+
     useEffect(() => {
 
         fetchData()
@@ -66,6 +79,19 @@ const FetchApi = () => {
                     <div className="border-t-2 border-indigo-500 w-8 h-8 animate animate-spin p-2 rounded-full"></div>
                 </div>
             }
+            {!loading && error && (
+                <div className="flex flex-col items-center gap-4">
+                    <p>Something went wrong. Please try again.</p>
+
+                    <button
+                        type="button"
+                        onClick={handleRefresh}
+                        className="rounded-md bg-indigo-600 px-4 py-2 text-white"
+                    >
+                        Retry
+                    </button>
+                </div>
+            )}
         </section>
     )
 }
