@@ -39,6 +39,10 @@ const navLink = [
     {
         link:'stopwatch',
         label:'Stopwatch'
+    },
+    {
+        link:'contact-form',
+        label:'Contact Form'
     }
 ]
 
