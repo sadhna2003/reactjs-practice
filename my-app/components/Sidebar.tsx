@@ -31,6 +31,10 @@ const navLink = [
     {
         link:'pagination',
         label:"Pagination Concept"
+    },
+    {
+        link:'fetch-api',
+        label:'Fetch Api Example'
     }
 ]
 
