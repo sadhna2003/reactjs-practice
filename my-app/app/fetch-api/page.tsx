@@ -5,14 +5,19 @@ import React, { useEffect } from "react";
 const FetchApi = () => {
     const [userData, setUserData] = React.useState<Users[]>()
     const [loading, setLoading] = React.useState(true)
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await getUsers()
-            if (data) {
-                setUserData(data)
-                setLoading(false)
-            }
+    const fetchData = async () => {
+        const data = await getUsers()
+        if (data) {
+            setUserData(data)
+            setLoading(false)
         }
+    }
+    const handleRefresh = () => {
+        setLoading(true)
+        fetchData()
+    }
+    useEffect(() => {
+
         fetchData()
 
     }, [])
@@ -20,6 +25,16 @@ const FetchApi = () => {
     return (
         <section className="font-sans w-full container mx-auto max-w-5xl flex flex-col items-center jsutify-center gap-8">
             <h1 className="text-3xl font-semibold text-center">Example of Fetch API</h1>
+            <div className="flex flex-row w-full justify-end">
+                <button
+                    type="button"
+                    className="block cursor-pointer rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-60 disabled:cursor-not-allowed"
+                    onClick={handleRefresh}
+                    disabled={loading}
+                >
+                    Refresh
+                </button>
+            </div>
             <ul className="grid grid-cols-3 gap-3 w-full">
                 {!loading && userData && userData.map((user, index) => {
                     return (
@@ -35,6 +50,15 @@ const FetchApi = () => {
                         </li>
                     )
                 })}
+                {!loading && !userData &&
+                    <li
+
+                        className="p-6 text-2xl font-medium col-span-3 w-full text-center h-40"
+                    >
+                        Oops! No user found.
+                    </li>
+
+                }
 
             </ul>
             {loading &&
