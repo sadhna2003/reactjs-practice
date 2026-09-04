@@ -3,10 +3,11 @@ import { getUsers, Users } from "@/api/users/user.service";
 import React, { useEffect } from "react";
 
 const FetchApi = () => {
-    const [userData, setUserData] = React.useState<Users[]>()
+    const [userData, setUserData] = React.useState<Users[]>([])
     const [loading, setLoading] = React.useState(true)
     const [error, setError] = React.useState(false)
-
+    const [search, setSearch] = React.useState("")
+    const [filteredUsers, setFilteredUsers] = React.useState<Users[]>([]);
     const fetchData = async () => {
         try {
             setLoading(true);
@@ -16,6 +17,7 @@ const FetchApi = () => {
 
             if (data) {
                 setUserData(data);
+                setFilteredUsers(data);
             }
         } catch (error) {
             setError(true);
@@ -35,10 +37,39 @@ const FetchApi = () => {
 
     }, [])
 
+    const handleChage = (e: any) => {
+        const val = e.target.value
+        setSearch(val)
+    }
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (!search.trim()) {
+                setFilteredUsers(userData);
+                return;
+            }
+
+            const data = userData.filter((item) =>
+                item.name.toLowerCase().includes(search.toLowerCase())
+            );
+
+            setFilteredUsers(data);
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [search, userData]);
     return (
         <section className="font-sans w-full container mx-auto max-w-5xl flex flex-col items-center jsutify-center gap-8">
             <h1 className="text-3xl font-semibold text-center">Example of Fetch API</h1>
-            <div className="flex flex-row w-full justify-end">
+            <div className="flex flex-row w-full gap-3 justify-start">
+                <input
+                    type='text'
+                    value={search}
+                    className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
+                    onChange={(e) => handleChage(e)}
+                />
                 <button
                     type="button"
                     className="block cursor-pointer rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-60 disabled:cursor-not-allowed"
@@ -49,7 +80,7 @@ const FetchApi = () => {
                 </button>
             </div>
             <ul className="grid grid-cols-3 gap-3 w-full">
-                {!loading && userData && userData.map((user, index) => {
+                {!loading && filteredUsers && filteredUsers.map((user, index) => {
                     return (
                         <li
                             key={user.id + index}
@@ -63,7 +94,7 @@ const FetchApi = () => {
                         </li>
                     )
                 })}
-                {!loading && !userData &&
+                {!loading && filteredUsers.length === 0 &&
                     <li
 
                         className="p-6 text-2xl font-medium col-span-3 w-full text-center h-40"
