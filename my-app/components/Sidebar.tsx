@@ -35,6 +35,10 @@ const navLink = [
     {
         link:'fetch-api',
         label:'Fetch Api Example'
+    },
+    {
+        link:'stopwatch',
+        label:'Stopwatch'
     }
 ]
 
