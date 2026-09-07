@@ -1,4 +1,5 @@
 "use client";
+import { Dialog } from "@/components/Dialog";
 import React from "react";
 type Product = {
     id: number;
@@ -95,6 +96,7 @@ export const products = [
 const ShoppingCartPage = () => {
     const [cartItems, setCartItems] = React.useState<Product[]>([]);
     const [productsList, setProductsList] = React.useState<Product[]>(products);
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
     const addToCart = (product: Product) => {
         setCartItems((prevItems) => [...prevItems, product]);
@@ -103,9 +105,19 @@ const ShoppingCartPage = () => {
     const removeFromCart = (productId: number) => {
         setCartItems((prevItems) => prevItems.filter(item => item.id !== productId));
     };
+    console.log("cart items", cartItems);
+
     return (
         <div className="container mx-auto p-4 w-full max-w-6xl font-sans">
             <h1 className="text-3xl font-semibold text-center">Shopping Cart</h1>
+            <div className="mt-8 flex flex-row justify-end w-full items-center">
+                <button
+                    onClick={() => setIsDialogOpen(true)}
+                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                >
+                    View Cart ({cartItems.length})
+                </button>
+            </div>
             <div className="grid grid-cols-3 items-center justfiy-center h-full gap-4 mt-6">
                 {productsList.map((product) => (
                     <div key={product.id} className="border border-sky-400 bg-white rounded-sm p-4 flex flex-col h-full w-full items-center">
@@ -125,26 +137,46 @@ const ShoppingCartPage = () => {
                     </div>
                 ))}
             </div>
-            {/* <div className="mt-8">
-                <h2 className="text-2xl font-semibold">Cart Items</h2>
+
+            {/* cart dialog with it detail */}
+            <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} containerClassName="!max-w-xl !w-full">
                 {cartItems.length === 0 ? (
                     <p className="text-gray-600">Your cart is empty.</p>
                 ) : (
-                    <ul className="mt-4">
-                        {cartItems.map((item) => (
-                            <li key={item.id} className="flex justify-between items-center border-b py-2">
-                                <span>{item.name}</span>
-                                <button
-                                    onClick={() => removeFromCart(item.id)}
-                                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                                >
-                                    Remove
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
+                    <div className="flex flex-col gap-3 w-full">
+                        <h2 className="text-2xl font-semibold">Cart Items</h2>
+
+                        <ul className="">
+                            {cartItems.map((item) => (
+                                <li key={item.id} className="flex justify-between items-center border-b border-sky-100 py-2">
+                                    <span>{item.name}</span>
+                                    <span className="text-left">₹{item.price}</span>
+                                    <button
+                                        onClick={() => removeFromCart(item.id)}
+                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                                    >
+                                        Remove
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <div className="flex justify-between items-center mt-4">
+                            <span className="font-semibold">Total:</span>
+                            <span className="font-bold">
+                                ₹{cartItems.reduce((total, item) => total + item.price, 0)}
+                            </span>
+                        </div>
+                        <button
+                            onClick={() => setIsDialogOpen(false)}
+                            className="mt-4 w-full cursor-pointer bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                        >
+                            Checkout
+                        </button>
+                    </div>
+
                 )}
-            </div> */}
+            </Dialog>
         </div>
     );
 };
