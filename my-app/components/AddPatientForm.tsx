@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
 export type PatientProps = {
-   id: number|string;
-   name: string;
-   age: number;
-   gender: string;
-   condition: string;
+    id: number | string;
+    name: string;
+    age: number;
+    gender: string;
+    condition: string;
 };
 export const AddPatientForm = ({ onAddPatient, isEditing, existingPatient }: { onAddPatient: (patient: PatientProps) => void; isEditing?: boolean; existingPatient?: PatientProps }) => {
     const [name, setName] = React.useState("");
@@ -13,7 +13,7 @@ export const AddPatientForm = ({ onAddPatient, isEditing, existingPatient }: { o
     const [gender, setGender] = React.useState("Male");
     const [condition, setCondition] = React.useState("");
 
-    const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!name || !age || !gender || !condition) {
             alert("Please fill in all fields.");
@@ -27,7 +27,7 @@ export const AddPatientForm = ({ onAddPatient, isEditing, existingPatient }: { o
             condition: condition || "New Condition", // Default condition, can be modified later
         };
         // console.log("form data",newPatient);
-        
+
         onAddPatient(newPatient);
         setName("");
         setAge("");
