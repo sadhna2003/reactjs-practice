@@ -21,11 +21,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${popSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-row bg-sky-200">
+      <body className="flex flex-row bg-sky-200">
         <header className="fixed left-0 top-0 h-screen w-64 p-4 bg-violet-100">
           <Sidebar/>
         </header>
-        <main className="w-full ml-64 p-4 bg-orange-100 min-h-screen overflow-x-hidden">{children}</main>
+        <main className="ml-64 min-h-screen w-[calc(100%-16rem)] p-4 bg-orange-100 overflow-x-hidden">{children}</main>
         </body>
     </html>
   );

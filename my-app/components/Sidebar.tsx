@@ -47,6 +47,10 @@ const navLink = [
     {
         link:'patient-record',
         label:'Patient Records'
+    },
+    {
+        link:'shopping-cart',
+        label:'Shopping Cart'
     }
 ]
 
