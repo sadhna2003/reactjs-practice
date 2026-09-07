@@ -43,6 +43,10 @@ const navLink = [
     {
         link:'contact-form',
         label:'Contact Form'
+    },
+    {
+        link:'patient-record',
+        label:'Patient Records'
     }
 ]
 
