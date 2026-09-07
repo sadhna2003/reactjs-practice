@@ -10,6 +10,13 @@ type Product = {
     imageUrl: string;
 };
 
+type CartItem = {
+    id: number;
+    name: string;
+    price: number;
+    quantity: number;
+};
+
 export const products = [
     {
         id: 1,
@@ -94,19 +101,45 @@ export const products = [
 ];
 
 const ShoppingCartPage = () => {
-    const [cartItems, setCartItems] = React.useState<Product[]>([]);
+    const [cartItems, setCartItems] = React.useState<CartItem[]>([]);
     const [productsList, setProductsList] = React.useState<Product[]>(products);
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
     const addToCart = (product: Product) => {
-        setCartItems((prevItems) => [...prevItems, product]);
+        setCartItems((prevItems) => {
+            const existingItem = prevItems.find(item => item.id === product.id);
+            if (existingItem) {
+                return prevItems.map(item =>
+                    item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+                );
+            } else {
+                return [...prevItems, { ...product, quantity: 1 }];
+            }
+        });
     };
 
     const removeFromCart = (productId: number) => {
-        setCartItems((prevItems) => prevItems.filter(item => item.id !== productId));
+        setCartItems((prevItems) => {
+            return prevItems.filter(item => item.id !== productId);
+        }
+        );
     };
     console.log("cart items", cartItems);
-
+    const handleIncrement = (product: Product) => {
+        addToCart(product);
+    }
+    const handleDecrement = (productId: number) => {
+        setCartItems((prevItems) => {
+            const existingItem = prevItems.find(item => item.id === productId);
+            if (existingItem && existingItem.quantity > 1) {
+                return prevItems.map(item =>
+                    item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
+                );
+            } else {
+                return prevItems.filter(item => item.id !== productId);
+            }
+        });
+    };
     return (
         <div className="container mx-auto p-4 w-full max-w-6xl font-sans">
             <h1 className="text-3xl font-semibold text-center">Shopping Cart</h1>
@@ -127,19 +160,43 @@ const ShoppingCartPage = () => {
                         <h2 className="text-xl font-semibold">{product.name}</h2>
                         <p className="text-gray-600 text-center">{product.description}</p>
                         <p className="text-yellow-500">Rating: {product.rating}</p>
-                        <p className="text-green-600 font-bold">₹{product.price}</p>
-                        <button
-                            onClick={() => addToCart(product)}
-                            className="mt-auto w-full cursor-pointer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                        >
-                            Add to Cart
-                        </button>
+                        <p className="text-green-600 font-bold mb-3">₹{product.price}</p>
+                        {cartItems.length !== 0 && cartItems.some(item => item.id === product.id) ? (
+                            <div className="flex flex-row gap-2 items-center justify-center w-full mt-auto">
+                                <button
+                                    onClick={() => handleIncrement(product)}
+                                    className="mt-auto w-auto text-xl font-medium cursor-pointer px-4 py-2 rounded border border-sky-400 hover:border-blue-600 transition-colors duration-300"
+                                >
+                                    +
+                                </button>
+                                {cartItems.filter(item => item.id === product.id).length > 0 && (
+                                    <span className="text-lg font-semibold w-24 text-center">
+                                        {cartItems.filter(item => item.id === product.id).length > 0 ? cartItems.find(item => item.id === product.id)?.quantity : 0}
+                                    </span>
+                                )}
+                                <button
+                                    onClick={() => handleDecrement(product.id)}
+                                    className="mt-auto w-auto text-xl font-medium cursor-pointer px-4 py-2 rounded border border-sky-400 hover:border-red-600 transition-colors duration-300"
+                                >
+                                    -
+                                </button>
+                            </div>
+                        ) : (
+
+
+                            <button
+                                onClick={() => addToCart(product)}
+                                className="mt-auto w-full cursor-pointer bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                            >
+                                Add to Cart
+                            </button>
+                        )}
                     </div>
                 ))}
             </div>
 
             {/* cart dialog with it detail */}
-            <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} containerClassName="!max-w-xl !w-full">
+            <Dialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} containerClassName="!max-w-2xl !w-full">
                 {cartItems.length === 0 ? (
                     <p className="text-gray-600">Your cart is empty.</p>
                 ) : (
@@ -148,9 +205,23 @@ const ShoppingCartPage = () => {
 
                         <ul className="">
                             {cartItems.map((item) => (
-                                <li key={item.id} className="flex justify-between items-center border-b border-sky-100 py-2">
+                                <li key={item.id} className="flex justify-between items-center gap-3 border-b border-sky-100 py-2">
                                     <span>{item.name}</span>
                                     <span className="text-left">₹{item.price}</span>
+
+                                    <button
+                                        onClick={() => handleIncrement(productsList.find(product => product.id === item.id)!)}
+                                        className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
+                                    >
+                                        +
+                                    </button>
+                                    <span className="text-left">Qty: {item.quantity}</span>
+                                    <button
+                                        onClick={() => handleDecrement(item.id)}
+                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                                    >
+                                        -
+                                    </button>
                                     <button
                                         onClick={() => removeFromCart(item.id)}
                                         className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
@@ -160,13 +231,23 @@ const ShoppingCartPage = () => {
                                 </li>
                             ))}
                         </ul>
+                        {cartItems.length > 0 && (
+                            <div className="flex flex-col gap-2 mt-4">
+                                <div className="flex justify-between items-center mt-4">
+                                    <span className="font-semibold">Total Qty:</span>
+                                    <span className="font-bold">
+                                        {cartItems.reduce((total, item) => total + item.quantity, 0)}
+                                    </span>
+                                </div>
 
-                        <div className="flex justify-between items-center mt-4">
-                            <span className="font-semibold">Total:</span>
-                            <span className="font-bold">
-                                ₹{cartItems.reduce((total, item) => total + item.price, 0)}
-                            </span>
-                        </div>
+                                <div className="flex justify-between items-center mt-4">
+                                    <span className="font-semibold">Total:</span>
+                                    <span className="font-bold">
+                                        ₹{cartItems.reduce((total, item) => total + item.quantity * item.price, 0)}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
                         <button
                             onClick={() => setIsDialogOpen(false)}
                             className="mt-4 w-full cursor-pointer bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
