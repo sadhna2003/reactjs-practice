@@ -1,5 +1,5 @@
 "use client";
-import { AddPatientForm } from "@/components/AddPatientForm";
+import { AddPatientForm, PatientProps } from "@/components/AddPatientForm";
 import { Dialog } from "@/components/Dialog";
 import React from "react";
 
@@ -34,21 +34,51 @@ const initialPatients = [
     },
 ];
 const PatientRecordPage = () => {
-    const [patients, setPatients] = React.useState(initialPatients);
-    const [filteredPatients, setFilteredPatients] = React.useState(initialPatients);
+    const [patients, setPatients] = React.useState<PatientProps[]>(initialPatients);
+    const [filteredPatients, setFilteredPatients] = React.useState<PatientProps[]>(initialPatients);
     const [search, setSearch] = React.useState("");
     const [loading, setLoading] = React.useState(false);
     const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-
-    const handleChage = (e: any) => {
+    const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
+    const [selectedPatient, setSelectedPatient] = React.useState<PatientProps | null>(null);
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value
         setSearch(val)
     }
 
-    const handleDelete = (id: number) => {
+    const handleDelete = (id: number|string) => {
         const updatedPatients = patients.filter((patient) => patient.id !== id);
         setPatients(updatedPatients);
         setFilteredPatients(updatedPatients);
+    }
+
+    const handleEdit = (updatedPatient: PatientProps) => {
+        console.log("updated patient", updatedPatient);
+
+        setPatients((prevPatients) => {
+            const index = prevPatients.findIndex((p) => p.id === updatedPatient.id);
+            // console.log("index",index);
+
+            if (index !== -1) {
+                // console.log("inside if");
+
+                const newPatients = [...prevPatients];
+                newPatients[index] = updatedPatient;
+                return newPatients;
+            }
+            //  console.log("outside if");
+            return prevPatients;
+        });
+        setFilteredPatients((prevPatients) => {
+            const index = prevPatients.findIndex((p) => p.id === updatedPatient.id);
+            if (index !== -1) {
+                const newPatients = [...prevPatients];
+                newPatients[index] = updatedPatient;
+                return newPatients;
+            }
+            return prevPatients;
+        });
+        setIsEditDialogOpen(false);
     }
 
     const handleRefresh = () => {
@@ -89,7 +119,7 @@ const PatientRecordPage = () => {
                     type='text'
                     value={search}
                     className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-                    onChange={(e) => handleChage(e)}
+                    onChange={(e) => handleChange(e)}
                 />
                 <button
                     type="button"
@@ -141,7 +171,16 @@ const PatientRecordPage = () => {
                             <td className="p-2">{patient.condition}</td>
                             <td className="p-2">
                                 <div className="flex flex-row gap-2 justify-center">
-
+                                    <button
+                                        type="button"
+                                        className="block cursor-pointer rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-60 disabled:cursor-not-allowed"
+                                        onClick={() => {
+                                            setSelectedPatient(patient);
+                                            setIsEditDialogOpen(true);
+                                        }}
+                                    >
+                                        Edit
+                                    </button>
                                     <button
                                         type="button"
                                         className="block cursor-pointer rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-60 disabled:cursor-not-allowed"
@@ -158,11 +197,19 @@ const PatientRecordPage = () => {
             <Dialog isOpen={isDialogOpen} onClose={() => { setIsDialogOpen(false) }} containerClassName="w-1/2">
                 <h2 className="text-xl font-semibold mb-4">Add New Patient</h2>
                 <AddPatientForm onAddPatient={(newPatient) => {
-                    setPatients((prevPatients) => [...prevPatients, newPatient]);
-                    setFilteredPatients((prevPatients) => [...prevPatients, newPatient]);
+                    setPatients((prevPatients:PatientProps[]) => [...prevPatients, newPatient]);
+                    setFilteredPatients((prevPatients:PatientProps[]) => [...prevPatients, newPatient]);
                     setIsDialogOpen(false);
                 }} />
             </Dialog>
+            <Dialog isOpen={isEditDialogOpen} onClose={() => { setIsEditDialogOpen(false) }} containerClassName="w-1/2">
+                <h2 className="text-xl font-semibold mb-4">Edit Patient</h2>
+                {/* Add your edit patient form here */}
+                <AddPatientForm onAddPatient={(updatedPatient) => {
+                    handleEdit(updatedPatient);
+                }} isEditing={true} existingPatient={selectedPatient as any} />
+            </Dialog>
+
         </section>
     );
 }
