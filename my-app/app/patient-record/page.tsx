@@ -1,4 +1,6 @@
 "use client";
+import { AddPatientForm } from "@/components/AddPatientForm";
+import { Dialog } from "@/components/Dialog";
 import React from "react";
 
 const initialPatients = [
@@ -36,10 +38,17 @@ const PatientRecordPage = () => {
     const [filteredPatients, setFilteredPatients] = React.useState(initialPatients);
     const [search, setSearch] = React.useState("");
     const [loading, setLoading] = React.useState(false);
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
     const handleChage = (e: any) => {
         const val = e.target.value
         setSearch(val)
+    }
+
+    const handleDelete = (id: number) => {
+        const updatedPatients = patients.filter((patient) => patient.id !== id);
+        setPatients(updatedPatients);
+        setFilteredPatients(updatedPatients);
     }
 
     const handleRefresh = () => {
@@ -90,6 +99,13 @@ const PatientRecordPage = () => {
                 >
                     Refresh
                 </button>
+                <button
+                    type="button"
+                    className="block cursor-pointer rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-60 disabled:cursor-not-allowed"
+                    onClick={() => setIsDialogOpen(true)}
+                >
+                    Add
+                </button>
             </div>
             <table className="w-full border border-gray-300 mt-6">
                 <thead>
@@ -125,26 +141,28 @@ const PatientRecordPage = () => {
                             <td className="p-2">{patient.condition}</td>
                             <td className="p-2">
                                 <div className="flex flex-row gap-2 justify-center">
-                                <button
-                                    type="button"
-                                    className="block cursor-pointer rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-60 disabled:cursor-not-allowed"
-                                    onClick={handleRefresh}
-                                >
-                                    Add
-                                </button>
-                                   <button
-                                    type="button"
-                                    className="block cursor-pointer rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-60 disabled:cursor-not-allowed"
-                                    onClick={handleRefresh}
-                                >
-                                    Delete
-                                </button>
+
+                                    <button
+                                        type="button"
+                                        className="block cursor-pointer rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-60 disabled:cursor-not-allowed"
+                                        onClick={() => handleDelete(patient.id)}
+                                    >
+                                        Delete
+                                    </button>
                                 </div>
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+            <Dialog isOpen={isDialogOpen} onClose={() => { setIsDialogOpen(false) }} containerClassName="w-1/2">
+                <h2 className="text-xl font-semibold mb-4">Add New Patient</h2>
+                <AddPatientForm onAddPatient={(newPatient) => {
+                    setPatients((prevPatients) => [...prevPatients, newPatient]);
+                    setFilteredPatients((prevPatients) => [...prevPatients, newPatient]);
+                    setIsDialogOpen(false);
+                }} />
+            </Dialog>
         </section>
     );
 }
