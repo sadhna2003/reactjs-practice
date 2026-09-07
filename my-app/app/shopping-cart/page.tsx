@@ -140,16 +140,27 @@ const ShoppingCartPage = () => {
             }
         });
     };
+    const handleClearCart = () => {
+        setCartItems([]);
+    }
     return (
         <div className="container mx-auto p-4 w-full max-w-6xl font-sans">
             <h1 className="text-3xl font-semibold text-center">Shopping Cart</h1>
-            <div className="mt-8 flex flex-row justify-end w-full items-center">
+            <div className="mt-8 flex flex-row gap-2 justify-end w-full items-center">
                 <button
                     onClick={() => setIsDialogOpen(true)}
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                 >
                     View Cart ({cartItems.length})
                 </button>
+                {cartItems.length > 0 && (
+                    <button
+                        onClick={handleClearCart}
+                        className="ml-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    >
+                        Clear Cart
+                    </button>
+                )}
             </div>
             <div className="grid grid-cols-3 items-center justfiy-center h-full gap-4 mt-6">
                 {productsList.map((product) => (
@@ -161,7 +172,7 @@ const ShoppingCartPage = () => {
                         <p className="text-gray-600 text-center">{product.description}</p>
                         <p className="text-yellow-500">Rating: {product.rating}</p>
                         <p className="text-green-600 font-bold mb-3">₹{product.price}</p>
-                        {cartItems.length !== 0 && cartItems.some(item => item.id === product.id) ? (
+                        {cartItems.length !== 0 && cartItems.find(item => item.id === product.id) ? (
                             <div className="flex flex-row gap-2 items-center justify-center w-full mt-auto">
                                 <button
                                     onClick={() => handleIncrement(product)}
@@ -169,9 +180,9 @@ const ShoppingCartPage = () => {
                                 >
                                     +
                                 </button>
-                                {cartItems.filter(item => item.id === product.id).length > 0 && (
+                                {cartItems.find(item => item.id === product.id) && (
                                     <span className="text-lg font-semibold w-24 text-center">
-                                        {cartItems.filter(item => item.id === product.id).length > 0 ? cartItems.find(item => item.id === product.id)?.quantity : 0}
+                                        {cartItems.find(item => item.id === product.id)?.quantity}
                                     </span>
                                 )}
                                 <button
