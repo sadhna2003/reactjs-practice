@@ -124,7 +124,7 @@ const ShoppingCartPage = () => {
         }
         );
     };
-    console.log("cart items", cartItems);
+    // console.log("cart items", cartItems);
     const handleIncrement = (product: Product) => {
         addToCart(product);
     }
