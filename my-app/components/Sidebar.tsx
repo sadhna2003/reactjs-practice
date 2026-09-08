@@ -51,6 +51,10 @@ const navLink = [
     {
         link:'shopping-cart',
         label:'Shopping Cart'
+    },
+    {
+        link:'dynamic-form',
+        label:'Dynamic Form'
     }
 ]
 
