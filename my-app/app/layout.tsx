@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
-
+import {AuthProvider} from "@/context/AuthContext";
 const popSans = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
@@ -25,7 +25,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <header className="fixed left-0 top-0 h-screen w-64 p-4 bg-violet-100">
           <Sidebar/>
         </header>
+        <AuthProvider>
         <main className="ml-64 min-h-screen w-[calc(100%-16rem)] p-4 bg-orange-100 overflow-x-hidden">{children}</main>
+       </AuthProvider>
         </body>
     </html>
   );

@@ -55,6 +55,10 @@ const navLink = [
     {
         link:'dynamic-form',
         label:'Dynamic Form'
+    },
+    {
+        link:'context',
+        label:'Content API'
     }
 ]
 
